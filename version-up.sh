@@ -42,5 +42,5 @@ cat << EOF >> ./VERSION
 $READ_ME
 EOF
 
-# git add .
-# git commit -m "${PROJECT_VERSION}"
+git add .
+git commit -m "${PROJECT_VERSION}"
