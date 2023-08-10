@@ -1,28 +1,16 @@
 package middlewares
 
 import (
-	"fmt"
-
-	"github.com/valyala/fasthttp"
+	apivalidation_middleware "github.com/PARKNAMSU/pay-seperator/middlewares/apiValidation"
+	userValidation_middleware "github.com/PARKNAMSU/pay-seperator/middlewares/userValidation"
+	router_module "github.com/PARKNAMSU/pay-seperator/modules/router"
 )
 
-func ExecMiddlewares(handler fasthttp.RequestHandler, middlewares ...func(ctx *fasthttp.RequestCtx) (error, int)) fasthttp.RequestHandler {
-	return func(ctx *fasthttp.RequestCtx) {
-		var resErr error
-		var status int = 200
-		for _, middleware := range middlewares {
-			err, getStatus := middleware(ctx)
-			if err != nil {
-				fmt.Println("here")
-				resErr = err
-				status = getStatus
-				break
-			}
-		}
-		if resErr != nil {
-			ctx.Error(resErr.Error(), status)
-		} else {
-			handler(ctx)
-		}
+func DefautAPIMiddlewares() router_module.PaySeperatorRouter {
+	return router_module.PaySeperatorRouter{
+		Middlewares: []router_module.PaySeperatorMiddleware{
+			apivalidation_middleware.ApiValidation,
+			userValidation_middleware.UserValidation,
+		},
 	}
 }
